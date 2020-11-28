@@ -18,8 +18,10 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.6.0'
   gem "factory_bot_rails", "~> 4.10.0"
   gem 'pry-rails'
-  gem 'capybara', '~> 2.13.0'
-  gem 'selenium-webdriver'
+  gem 'capybara', '~> 2.15.2'
+  gem 'webdrivers'
+  gem 'launchy', '~> 2.4.3'
+  gem 'selenium-webdriver', '3.4.1'
 end
 
 group :development do
