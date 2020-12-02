@@ -29,4 +29,4 @@ RSpec::Matchers.define :have_content_type do |expected|
   end
 end
 
-RSpec::Matcher.alias_matcher :be_content_type, :have_content_type
+RSpec::Matchers.alias_matcher :be_content_type, :have_content_type
