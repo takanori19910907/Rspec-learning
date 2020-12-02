@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "Projects", type: :request do
-  context "as an authenticated user" do
+  context "認証済みのユーザーとして" do
     before do
       @user = FactoryBot.create(:user)
     end
 
     context "ユーザー認証済みの場合" do
-      it "adds a project" do
+      it "プロジェクトを作成出来ること" do
         project_params = FactoryBot.attributes_for(:project)
         sign_in @user
         expect {

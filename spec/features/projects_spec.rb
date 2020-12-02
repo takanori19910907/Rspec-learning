@@ -1,15 +1,11 @@
 require 'rails_helper'
 
 RSpec.feature "Projects", type: :feature do
+  include LoginSupport
   scenario "ユーザーは新しいプロジェクトを作成する" do
     user = FactoryBot.create(:user)
-
+    sign_in user
     visit root_path
-    click_link "Sign in"
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
-    click_button "Log in"
-
     expect{
       click_link "New Project"
       fill_in "Name", with: "Test Project"
