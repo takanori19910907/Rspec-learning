@@ -2,51 +2,52 @@ require 'rails_helper'
 
 RSpec.describe Note, type: :model do
 
-  it "FactoryBotでnoteのテストデータ生成" do
-    note = FactoryBot.create(:note)
-    puts "This note's project is #{note.project.inspect}"
-    puts "This note's user is #{note.user.inspect}"
+  let(:user) { FactoryBot.create(:user) }
+  let(:project) { FactoryBot.create(:project) }
+
+  it "ユーザー、プロジェクト、メッセージがあれば作成出来ること" do
+    note = Note.new(message:"sample",user: user, project: project,)
+    expect(note).to be_valid
   end
 
-  before do
-    @user = User.create(
-      first_name: "Joe",
-      last_name:  "Tester",
-      email:      "joetester@example.com",
-      password:   "dottle-nouveau-pavilion-tights-furze",
-  )
-    @project = @user.projects.create(
-      name: "Test Project",
-  )
-
+  it "メッセージがなければ無効であること" do
+    note = Note.new(message: nil)
+    note.valid?
+    expect(note.errors[:message]).to include("can't be blank")
   end
 
   describe "検索機能" do
 
-    before do
-
-      @note1 = @project.notes.create(
-        message: "This is the first note.",
-        user: @user,
+    let(:note1) {
+      FactoryBot.create(:note,
+        project: project,
+        user: user,
+        message: "1"
       )
+    }
 
-      @note2 = @project.notes.create(
-        message: "This is the second note.",
-        user: @user,
+    let(:note2) {
+      FactoryBot.create(:note,
+        project: project,
+        user: user,
+        message: "2"
       )
+    }
 
-      @note3 = @project.notes.create(
-        message: "First, preheat the oven.",
-        user: @user,
+    let(:note3) {
+      FactoryBot.create(:note,
+        project: project,
+        user: user,
+        message: "11"
       )
+    }
 
-    end
     #成功要件
     context "一致するデータが存在する時" do
       it "検索文字列に一致する場合メモを返すこと" do
 
-        expect(Note.search("first")).to include(@note1, @note3)
-        expect(Note.search("first")).to_not include(@note2)
+        expect(Note.search("1")).to include(note1, note3)
+        expect(Note.search("1")).to_not include(note2)
 
       end
     end
@@ -56,7 +57,7 @@ RSpec.describe Note, type: :model do
       it "検索結果が0の場合、空のオブジェクトを返すこと" do
 
         expect(Note.search("message")).to be_empty
-
+ 
       end
     end
   end
