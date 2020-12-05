@@ -65,4 +65,7 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_uploads/"])
+  end
 end
