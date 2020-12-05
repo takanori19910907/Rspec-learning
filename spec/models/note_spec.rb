@@ -57,8 +57,16 @@ RSpec.describe Note, type: :model do
       it "検索結果が0の場合、空のオブジェクトを返すこと" do
 
         expect(Note.search("message")).to be_empty
- 
+
       end
+    end
+    it "名前の取得をメモの作成者にすること" do
+      fake_user = instance_double("User", name: "fake user")
+      note = Note.new
+
+      allow(note).to receive(:user).and_return(fake_user)
+      #noteは、userを呼び出したときfake_userを返すことを設定
+      expect(note.user_name).to eq "fake user"
     end
   end
 end

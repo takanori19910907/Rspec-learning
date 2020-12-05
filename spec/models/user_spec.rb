@@ -20,29 +20,9 @@ RSpec.describe User, type: :model do
   end
 
   #失敗要件
-  it "名前がなければ無効な状態であること" do
-    user = FactoryBot.build(:user, first_name: nil)
-    user.valid?
-    expect(user.errors[:first_name]).to include("can't be blank")
-  end
-
-  it "姓がなければ無効な状態であること" do
-    user = FactoryBot.build(:user,last_name: nil)
-    user.valid?
-    expect(user.errors[:last_name]).to include("can't be blank")
-  end
-
-  it "メールアドレスが重複した場合は無効であること" do
-    # FactoryBot.create(:user,email: "takanori@example.com")
-    #
-    # user = FactoryBot.build(:user, email: "takanori@example.com")
-    #
-    # user.valid?
-    #
-    # expect(user.errors[:email]).to include("has already been taken")
-    user1 = FactoryBot.create(:user)
-    user2 = FactoryBot.create(:user)
-    expect(true).to be_truthy
-
-  end
+  it { is_expected.to validate_presence_of :first_name }
+  it { is_expected.to validate_presence_of :last_name }
+  it { is_expected.to validate_presence_of :email }
+  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+  
 end
