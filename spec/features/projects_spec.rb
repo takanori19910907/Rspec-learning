@@ -1,6 +1,15 @@
 require 'rails_helper'
 
 RSpec.feature "Projects", type: :feature do
+
+  let(:user) { FactoryBot.create(:user) }
+  let(:project) {
+    FactoryBot.create(:project,
+      name:   "Rspec tutorial",
+      owner:  user,
+      )
+    }
+
   include LoginSupport
   scenario "ユーザーは新しいプロジェクトを作成する" do
     user = FactoryBot.create(:user)
@@ -19,5 +28,23 @@ RSpec.feature "Projects", type: :feature do
       expect(page).to have_content "Test Project"
       expect(page).to have_content "Owner: #{user.name}"
     end
+  end
+
+  scenario "ユーザーはプロジェクトを完了済みにする" do
+    #ユーザーがログイン処理実施
+    sign_in user
+    visit project_path(project)
+
+    #プロジェクトの詳細画面にcompletedラベルが表示されていないことを確認
+    expect(page).to_not have_content "Completed"
+
+    #"complete"ボタンをクリックする
+    click_button "Complete"
+
+    #ボタンの表示が完了済みに変更される
+    expect(project.reload.completed?).to be true
+    expect(page).to have_content "Congratulations, this project is complete!"
+    expect(page).to have_content "Completed"
+    expect(page).to_not have_button "Complete"
   end
 end
